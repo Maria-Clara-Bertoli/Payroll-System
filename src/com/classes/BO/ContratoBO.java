@@ -1,8 +1,10 @@
 package com.classes.BO;
 
-import com.classes.DTO.Contrato;
-import com.classes.DAO.ContratoDAO;
 import java.util.List;
+
+import com.classes.DAO.ContratoDAO;
+import com.classes.DTO.Calculo;
+import com.classes.DTO.Contrato;
 
 public class ContratoBO {
 
@@ -14,8 +16,18 @@ public class ContratoBO {
         return false;
     }
     public boolean alterarLocalTrabalho(Contrato contrato){
+    	if (existe(contrato) == true) {
         ContratoDAO contratoDAO = new ContratoDAO();
         return contratoDAO.alterarLocalTrabalho(contrato);
+    	}
+    	return false;
+    }
+    public boolean alterarCargo(Contrato contrato){
+    	if(existe(contrato) == true) {
+        ContratoDAO contratoDAO = new ContratoDAO();
+        return contratoDAO.alterarCargo(contrato);
+    	}
+    	return false;
     }
     public boolean excluir(Contrato contrato){
         ContratoDAO contratoDAO = new ContratoDAO();
@@ -27,7 +39,15 @@ public class ContratoBO {
     }
     public Contrato procurarPorLocalTrabalho(Contrato contrato){
         ContratoDAO contratoDAO = new ContratoDAO();
-        return contratoDAO.procurarLocalTrabalho(contrato);
+        return contratoDAO.procurarPorLocalTrabalho(contrato);
+    }
+    public Contrato procurarPorCargo(Contrato contrato){
+        ContratoDAO contratoDAO = new ContratoDAO();
+        return contratoDAO.procurarPorCargo(contrato);
+    }
+    public Calculo procurarCalculo(Contrato contrato){
+        ContratoDAO contratoDAO = new ContratoDAO();
+        return contratoDAO.procurarCalculo(contrato);
     }
     public boolean existe(Contrato contrato){
         ContratoDAO contratoDAO = new ContratoDAO();

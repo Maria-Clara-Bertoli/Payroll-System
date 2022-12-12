@@ -5,8 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.classes.Conexao.Conexao;
+import com.classes.DTO.Calculo;
 import com.classes.DTO.Contrato;
+import com.classes.DTO.Funcionario;
 
 public class ContratoDAO {
 
@@ -14,22 +17,21 @@ public class ContratoDAO {
     public boolean inserir(Contrato contrato) {
         try {
             Connection conn = Conexao.conectar();
-            String sql = "INSERT INTO " + NOMEDATABELA + " (numero_contrato, inicio_contrato, termino_contrato, cargo, local_trabalho, valor_hora, hora_trabalhada_mes) VALUES (?,?,?,?,?,?,?);";
+            String sql = "INSERT INTO " + NOMEDATABELA + " (inicio_contrato, termino_contrato, cargo, local_trabalho, valor_hora, hora_trabalhada_mes, id_funcionario) VALUES (?,?,?,?,?,?,?);";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, contrato.getNumero_contrato());
-            ps.setDate(2, new java.sql.Date(contrato.getInicio_contrato().getTime()));
-            ps.setDate(3, new java.sql.Date(contrato.getTermino_contrato().getTime()));
-            ps.setString(4, contrato.getCargo());
-            ps.setString(5, contrato.getLocal_trabalho());
-            ps.setDouble(6, contrato.getValor_hora());
-            ps.setInt(7, contrato.getHora_trabalhada_mes());
+            ps.setDate(1, new java.sql.Date(contrato.getInicio_contrato().getTime()));
+            ps.setDate(2, new java.sql.Date(contrato.getTermino_contrato().getTime()));
+            ps.setString(3, contrato.getCargo());
+            ps.setString(4, contrato.getLocal_trabalho());
+            ps.setDouble(5, contrato.getValor_hora());
+            ps.setInt(6, contrato.getHora_trabalhada_mes());
+            ps.setInt(7, contrato.getFuncionario().getId());
             ps.executeUpdate();
             ps.close();
             conn.close();
             return true;
         } catch (Exception e) {
-        	System.out.println("aaaaaaaaa");
-            System.out.println(e.getMessage());
+        	e.printStackTrace();
             return false;
         }
     }
@@ -39,6 +41,22 @@ public class ContratoDAO {
             String sql = "UPDATE " + NOMEDATABELA + " SET local_trabalho = (?) WHERE id = (?);";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, contrato.getLocal_trabalho());
+            ps.setInt(2, contrato.getId());
+            ps.executeUpdate();
+            ps.close();
+            conn.close();
+            return true;
+        } catch (Exception e) {
+        	 e.printStackTrace();
+             return false;
+        }
+    }
+    public boolean alterarCargo(Contrato contrato) {
+        try {
+            Connection conn = Conexao.conectar();
+            String sql = "UPDATE " + NOMEDATABELA + " SET cargo = (?) WHERE id = (?);";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, contrato.getCargo());
             ps.setInt(2, contrato.getId());
             ps.executeUpdate();
             ps.close();
@@ -74,13 +92,12 @@ public class ContratoDAO {
             if (rs.next()) {
                 Contrato obj = new Contrato();
                 obj.setId(rs.getInt(1));
-                obj.setNumero_contrato(rs.getInt(2));
-                obj.setInicio_contrato(rs.getDate(3));
-                obj.setTermino_contrato(rs.getDate(4));
-                obj.setCargo(rs.getString(5));
-                obj.setLocal_trabalho(rs.getString(6));
-                obj.setValor_hora(rs.getDouble(7));
-                obj.setHora_trabalhada_mes(rs.getInt(8));
+                obj.setInicio_contrato(rs.getDate(2));
+                obj.setTermino_contrato(rs.getDate(3));
+                obj.setCargo(rs.getString(4));
+                obj.setLocal_trabalho(rs.getString(5));
+                obj.setValor_hora(rs.getDouble(6));
+                obj.setHora_trabalhada_mes(rs.getInt(7));
                 ps.close();
                 rs.close();
                 conn.close();
@@ -96,23 +113,22 @@ public class ContratoDAO {
              return null;
         }
     }
-    public Contrato procurarLocalTrabalho(Contrato contrato) {
+    public Contrato procurarPorLocalTrabalho(Contrato contrato) {
         try {
             Connection conn = Conexao.conectar();
             String sql = "SELECT * FROM " + NOMEDATABELA + " WHERE local_trabalho = ?;";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(2, contrato.getNumero_contrato());
+            ps.setString(1, contrato.getLocal_trabalho());
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Contrato obj = new Contrato();
                 obj.setId(rs.getInt(1));
-                obj.setNumero_contrato(rs.getInt(2));
-                obj.setInicio_contrato(rs.getDate(3));
-                obj.setTermino_contrato(rs.getDate(4));
-                obj.setCargo(rs.getString(5));
-                obj.setLocal_trabalho(rs.getString(6));
-                obj.setValor_hora(rs.getDouble(7));
-                obj.setHora_trabalhada_mes(rs.getInt(8));
+                obj.setInicio_contrato(rs.getDate(2));
+                obj.setTermino_contrato(rs.getDate(3));
+                obj.setCargo(rs.getString(4));
+                obj.setLocal_trabalho(rs.getString(5));
+                obj.setValor_hora(rs.getDouble(6));
+                obj.setHora_trabalhada_mes(rs.getInt(7));
                 ps.close();
                 rs.close();
                 conn.close();
@@ -127,12 +143,66 @@ public class ContratoDAO {
             return null;
         }
     }
+    public Contrato procurarPorCargo(Contrato contrato) {
+        try {
+            Connection conn = Conexao.conectar();
+            String sql = "SELECT * FROM " + NOMEDATABELA + " WHERE cargo = ?;";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, contrato.getCargo());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Contrato obj = new Contrato();
+                obj.setId(rs.getInt(1));
+                obj.setInicio_contrato(rs.getDate(2));
+                obj.setTermino_contrato(rs.getDate(3));
+                obj.setCargo(rs.getString(4));
+                obj.setLocal_trabalho(rs.getString(5));
+                obj.setValor_hora(rs.getDouble(6));
+                obj.setHora_trabalhada_mes(rs.getInt(7));
+                ps.close();
+                rs.close();
+                conn.close();
+                return obj;
+            } else {
+                ps.close();
+                rs.close();
+                conn.close();
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public Calculo procurarCalculo(Contrato contrato) {
+        try {
+        Connection conn = Conexao.conectar();
+        String sql = "SELECT * FROM " + "calculo" + " WHERE id_contrato = ?;";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, contrato.getId());
+        ResultSet rs = ps.executeQuery();
+        Calculo obj = new Calculo();
+            if (rs.next()) {
+                obj.setId(rs.getInt(1));
+                obj.setInss(rs.getDouble(2));
+                obj.setIrrf(rs.getDouble(3));
+                obj.setFgts(rs.getDouble(4));
+                obj.setVale_transporte(rs.getDouble(5));
+                obj.setVale_alimentacao(rs.getDouble(6));
+            }
+            return obj;
+        } catch (Exception e) {
+            //System.err.println("Erro: " + e.toString());
+            //e.printStackTrace();
+            return null;
+        }
+    }
+    
     public boolean existe(Contrato contrato) {
         try {
             Connection conn = Conexao.conectar();
-            String sql = "SELECT * FROM " + NOMEDATABELA + " WHERE local_trabalho = ?;";
+            String sql = "SELECT * FROM " + NOMEDATABELA + " WHERE id = ?;";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, contrato.getLocal_trabalho());
+            ps.setInt(1, contrato.getId());
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 ps.close();
@@ -141,8 +211,7 @@ public class ContratoDAO {
                 return true;
             }
         } catch (Exception e) {
-            //System.err.println("Erro: " + e.toString());
-            //e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
         return false;
@@ -168,13 +237,12 @@ public class ContratoDAO {
             while (rs.next()) {
                 Contrato obj = new Contrato();
                 obj.setId(rs.getInt(1));
-                obj.setNumero_contrato(rs.getInt(2));
-                obj.setInicio_contrato(rs.getDate(3));
-                obj.setTermino_contrato(rs.getDate(4));
-                obj.setCargo(rs.getString(5));
-                obj.setLocal_trabalho(rs.getString(6));
-                obj.setValor_hora(rs.getDouble(7));
-                obj.setHora_trabalhada_mes(rs.getInt(8));
+                obj.setInicio_contrato(rs.getDate(2));
+                obj.setTermino_contrato(rs.getDate(3));
+                obj.setCargo(rs.getString(4));
+                obj.setLocal_trabalho(rs.getString(5));
+                obj.setValor_hora(rs.getDouble(6));
+                obj.setHora_trabalhada_mes(rs.getInt(7));
                 listObj.add(obj);
             }
             return listObj;
