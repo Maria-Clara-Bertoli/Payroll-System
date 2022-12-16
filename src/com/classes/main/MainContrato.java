@@ -27,93 +27,121 @@ public class MainContrato {
 		System.out.println("opção 1: inserir contrato");
 		System.out.println("opção 2: alterar local de trabalho");
 		System.out.println("opção 3: alterar cargo");
-		System.out.println("opção 4: excluir contrato");
-		System.out.println("opção 5: pesquisar por código");
-		System.out.println("opção 6: pesquisar por local de trabalho");
-		System.out.println("opção 7: pesquisar por cargo");
-		System.out.println("opção 8: pesquisar calculo");
-		System.out.println("opção 9: pesquisar todos os registros");
-		System.out.println("opção 10: calcular salário base");
-		System.out.println("opção 11: calcular tempo de serviço");
+		System.out.println("opção 4: alterar valor da hora");
+		System.out.println("opção 5: alterar horas trabalhadas no mês");
+		System.out.println("opção 6: excluir contrato");
+		System.out.println("opção 7: pesquisar por código");
+		System.out.println("opção 8: pesquisar por local de trabalho");
+		System.out.println("opção 9: pesquisar por cargo");
+		System.out.println("opção 10: pesquisar calculo");
+		System.out.println("opção 11: pesquisar todos os registros");
+		System.out.println("opção 12: calcular salário base");
+		System.out.println("opção 13: calcular duração do cotrato de trabalho");
 		int x = valor.nextInt();
 		
 		switch (x) {
 		case 1:
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			String datainicio = "05/08/2021";
-			String datafinal = "23/04/2025";
+			String datainicio = "17/04/2057";
+			String datafinal = "28/03/2058";
 			Date datainicioconvertida = sdf.parse(datainicio);
 			Date datafinalconvertida = sdf.parse(datafinal);
 			funcionario = new Funcionario();
-			funcionario.setId(4);
+			funcionario.setId(3);
 			
-			contrato = new Contrato (datainicioconvertida, datafinalconvertida, "Analista de Testes", "IBM", 59.00, 200, funcionario);
+			contrato = new Contrato (datainicioconvertida, datafinalconvertida, "Professora", "IFC", 8, 200, funcionario);
 			if (contratoBO.inserir(contrato))
-				System.out.println("Inserido com Sucesso");
+				System.out.println("Inserido com sucesso");
 			else
-				System.out.println("Erro ao Inserir");
+				System.out.println("Erro ao inserir");
 			break;
 		case 2:
 			contrato = new Contrato();
-			contrato.setId(3);
-			contrato.setLocal_trabalho("GG Net");
+			contrato.setId(6);
+			contrato.setLocal_trabalho("Harvard");
 			contratoBO.alterarLocalTrabalho(contrato);
 			contrato = contratoBO.procurarPorCodigo(contrato);
 			System.out.println(contrato.toString());
 			break;
 		case 3:
 			contrato = new Contrato();
-			contrato.setId(3);
-			contrato.setCargo("Desenvolvedor");
+			contrato.setId(6);
+			contrato.setCargo("Diretora");
 			contratoBO.alterarCargo(contrato);
 			contrato = contratoBO.procurarPorCodigo(contrato);
 			System.out.println(contrato.toString());
 			break;
-		case 4: 
+		case 4:
 			contrato = new Contrato();
-			contrato.setId(3);
-			if (contratoBO.excluir(contrato))
-				System.out.println("Excluido com Sucesso.");
-			else
-				System.out.println("Erro ao Excluir.");
-			break;
-		case 5: 
-			contrato = new Contrato();
-			contrato.setId(4);
+			contrato.setId(6);
+			contrato.setValor_hora(18);
+			contratoBO.alterarValorHora(contrato);
 			contrato = contratoBO.procurarPorCodigo(contrato);
-			System.out.println(contrato);
+			System.out.println(contrato.toString());
+			break;
+		case 5:
+			contrato = new Contrato();
+			contrato.setId(6);
+			contrato.setHora_trabalhada_mes(100);
+			contratoBO.alterarHoraTrabalhadaMes(contrato);
+			contrato = contratoBO.procurarPorCodigo(contrato);
+			System.out.println(contrato.toString());
 			break;
 		case 6: 
 			contrato = new Contrato();
-			contrato.setLocal_trabalho("IBM");
-			contrato = contratoBO.procurarPorLocalTrabalho(contrato);
-			System.out.println(contrato);
+			contrato.setId(6);
+			if (contratoBO.excluir(contrato))
+				System.out.println("Excluido com sucesso.");
+			else
+				System.out.println("Erro ao excluir.");
 			break;
 		case 7: 
 			contrato = new Contrato();
-			contrato.setCargo("Desenvolvedor");
-			contrato = contratoBO.procurarPorCargo(contrato);
-			System.out.println(contrato);
+			contrato.setId(4);
+			contrato = contratoBO.procurarPorCodigo(contrato);
+			System.out.println(contrato.toString());
 			break;
-		case 8:
+		case 8: 
 			contrato = new Contrato();
-			contrato.setId(3);
-			calculo = new Calculo();
-			calculo = contratoBO.procurarCalculo(contrato);
-			System.out.println(calculo);
-			break;
-		case 9:
-			List<Contrato> lista = new ArrayList<Contrato>();
-			lista = contratoBO.pesquisarTodos();	
-			for (Contrato elemento : lista) {
-				System.out.println(elemento);
+			List <Contrato> listalocaltrabalho = new ArrayList <Contrato>();
+			contrato.setLocal_trabalho("CERN");
+			listalocaltrabalho = contratoBO.procurarPorLocalTrabalho(contrato);
+			for(Contrato elemento : listalocaltrabalho) {
+				System.out.println(elemento.toString());
 			}
 			break;
-		case 10: 
-			System.out.println(contrato.calculaSalarioBase(3));
+		case 9: 
+			contrato = new Contrato();
+			List <Contrato> listacargo = new ArrayList <Contrato>();
+			contrato.setCargo("Desenvolvedora");
+			listacargo = contratoBO.procurarPorCargo(contrato);
+			for(Contrato elemento : listacargo) {
+				System.out.println(elemento.toString());
+			}
+			break;
+		case 10:
+			contrato = new Contrato();
+			contrato.setId(5);
+			calculo = new Calculo();
+			calculo = contratoBO.procurarCalculo(contrato);
+			System.out.println(calculo.toString());
 			break;
 		case 11:
-			System.out.println(contrato.calculaTempoServico(4));
+			List<Contrato> listatodos = new ArrayList<Contrato>();
+			listatodos = contratoBO.pesquisarTodos();	
+			for (Contrato elemento : listatodos) {
+				System.out.println(elemento.toString());
+			}
+			break;
+		case 12:
+			contrato = new Contrato();
+			contrato.setId(5);
+			System.out.println(contrato.calculaSalarioBase(5));
+			break;
+		case 13:
+			contrato = new Contrato();
+			contrato.setId(5);
+			System.out.println(contrato.calculaDuracaoContrato(5));
 			break;
 		default:
 			System.out.println("Opção inválida. Tente novamente!");

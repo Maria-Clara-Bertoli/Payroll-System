@@ -13,7 +13,7 @@ public class Contrato {
 	private int hora_trabalhada_mes;
 	private Funcionario funcionario;
 	
-public Contrato() {
+	public Contrato() {
 		
 	}
 	
@@ -26,19 +26,6 @@ public Contrato() {
 		this.valor_hora = valor_hora;
 		this.hora_trabalhada_mes = hora_trabalhada_mes;
 		this.funcionario = funcionario;
-	}
-
-	public Contrato(int id, String local_trabalho) {
-		this.id = id;
-		this.local_trabalho = local_trabalho;	
-	}
-	
-	public Contrato(String local_trabalho) {
-		this.local_trabalho = local_trabalho;
-	}
-	
-	public Contrato(int id) {
-		this.id = id;
 	}
 
 	public Funcionario getFuncionario() {
@@ -105,9 +92,10 @@ public Contrato() {
 		this.hora_trabalhada_mes = hora_trabalhada_mes;
 	}
 	
-	public String calculaTempoServico(int id) {
+	public String calculaDuracaoContrato(int id) {
 		ContratoBO contratoBO = new ContratoBO();
-		Contrato contrato = new Contrato(id);
+		Contrato contrato = new Contrato();
+		contrato.setId(id);
 		contrato = contratoBO.procurarPorCodigo(contrato);
 		Date inicio = contrato.getInicio_contrato();
 		Date fim = contrato.getTermino_contrato();
@@ -123,7 +111,8 @@ public Contrato() {
 	
 	public double calculaSalarioBase(int id) {
 		ContratoBO contratoBO = new ContratoBO();
-		Contrato contrato = new Contrato(id);
+		Contrato contrato = new Contrato();
+		contrato.setId(id);
 		contrato = contratoBO.procurarPorCodigo(contrato);
 		double salario = contrato.getValor_hora() * (double) contrato.getHora_trabalhada_mes();
 		return salario;

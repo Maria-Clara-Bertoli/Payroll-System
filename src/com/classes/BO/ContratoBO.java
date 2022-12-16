@@ -29,6 +29,20 @@ public class ContratoBO {
     	}
     	return false;
     }
+    public boolean alterarValorHora(Contrato contrato){
+    	if(existe(contrato) == true) {
+        ContratoDAO contratoDAO = new ContratoDAO();
+        return contratoDAO.alterarVaorHora(contrato);
+    	}
+    	return false;
+    }
+    public boolean alterarHoraTrabalhadaMes(Contrato contrato){
+    	if(existe(contrato) == true) {
+        ContratoDAO contratoDAO = new ContratoDAO();
+        return contratoDAO.alterarHoraTrabalhadaMes(contrato);
+    	}
+    	return false;
+    }
     public boolean excluir(Contrato contrato){
         ContratoDAO contratoDAO = new ContratoDAO();
         return contratoDAO.excluir(contrato);
@@ -37,11 +51,11 @@ public class ContratoBO {
         ContratoDAO contratoDAO = new ContratoDAO();
         return contratoDAO.procurarPorCodigo(contrato);
     }
-    public Contrato procurarPorLocalTrabalho(Contrato contrato){
+    public List <Contrato> procurarPorLocalTrabalho(Contrato contrato){
         ContratoDAO contratoDAO = new ContratoDAO();
         return contratoDAO.procurarPorLocalTrabalho(contrato);
     }
-    public Contrato procurarPorCargo(Contrato contrato){
+    public List <Contrato> procurarPorCargo(Contrato contrato){
         ContratoDAO contratoDAO = new ContratoDAO();
         return contratoDAO.procurarPorCargo(contrato);
     }

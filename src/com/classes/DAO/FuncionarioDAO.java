@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.classes.BO.FuncionarioBO;
 import com.classes.Conexao.Conexao;
 import com.classes.DTO.Contrato;
 import com.classes.DTO.Funcionario;
@@ -127,6 +129,8 @@ public class FuncionarioDAO {
             ResultSet rs = ps.executeQuery();
 	            while (rs.next()) {
 	                Contrato obj = new Contrato();
+	                Funcionario objc = new Funcionario();
+	                FuncionarioBO funcionarioBO = new FuncionarioBO();
 	                obj.setId(rs.getInt(1));
 	                obj.setInicio_contrato(rs.getDate(2));
 	                obj.setTermino_contrato(rs.getDate(3));
@@ -134,6 +138,8 @@ public class FuncionarioDAO {
 	                obj.setLocal_trabalho(rs.getString(5));
 	                obj.setValor_hora(rs.getDouble(6));
 	                obj.setHora_trabalhada_mes(rs.getInt(7));
+	                objc = funcionarioBO.procurarPorCodigo(funcionario);
+	                obj.setFuncionario(objc);
 	                listObj.add(obj);
 	            }
 	            return listObj;
