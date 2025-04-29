@@ -1,4 +1,4 @@
-# 💼📊 Sistema de Folha de Pagamento com Arquitetura MVC
+# 💼📊 Sistema de Folha de Pagamento Com Arquitetura MVC
 
 Este repositório contém a **implementação de um sistema de folha de pagamento**, estruturado segundo os padrões do **componente Model** da arquitetura **MVC** e com base nos princípios da **programação orientada a objetos**.
 
